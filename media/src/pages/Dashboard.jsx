@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Typography, Snackbar, Alert, Box, Avatar } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { useLocation } from "react-router-dom";
+import Anayalatic from "../components/Graphs/AnayalticPage";
 
 const Dashboard = ({ user }) => {
   const location = useLocation();
@@ -14,21 +15,7 @@ const Dashboard = ({ user }) => {
   }, [location.state]);
 
   return (
-    <Box sx={{ p: 4 }}>
-      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-        <Avatar sx={{ bgcolor: "primary.main", mr: 2 }}>
-          <PersonIcon fontSize="large" />
-        </Avatar>
-        <Box>
-          <Typography variant="h4" gutterBottom>
-            Welcome, {user?.username}
-          </Typography>
-          <Typography variant="subtitle1">
-            You are logged in as <strong>{user?.role}</strong>.
-          </Typography>
-        </Box>
-      </Box>
-
+    <div className="container-fluid">
       <Snackbar
         open={showPopup}
         autoHideDuration={4000}
@@ -50,7 +37,14 @@ const Dashboard = ({ user }) => {
           ✅ Login successful — Welcome {user?.username}!
         </Alert>
       </Snackbar>
-    </Box>
+
+      <div className="container-fluid">
+        <h1 className="mt-2 text-center fs-1 ">Analytics </h1>
+        <Anayalatic/>
+      </div>
+      
+    </div>
+
   );
 };
 

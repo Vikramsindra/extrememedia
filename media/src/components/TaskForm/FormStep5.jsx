@@ -61,7 +61,7 @@ const FormStep5 = ({ formData, setFormData, onNext, onBack }) => {
         <Stack direction="row" spacing={2}>
           <Button variant="outlined" onClick={onBack}>Back</Button>
           <Button variant="contained" color="primary" onClick={() => onNext(formData)}>
-            Next
+           Submit
           </Button>
         </Stack>
       </Stack>

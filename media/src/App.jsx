@@ -1,15 +1,15 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import TaskForm from './components/TaskForm/TaskForm';
-import Dashboard from './pages/Dashboard';
-import NotFound from './pages/NotFound';
-import { Container } from '@mui/material';
-import AssignTask from './pages/Assign';
-import GiveTask from './pages/GiveTask';
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import TaskForm from "./components/TaskForm/TaskForm";
+import Dashboard from "./pages/Dashboard";
+import NotFound from "./pages/NotFound";
+import { Container } from "@mui/material";
+import AssignTask from "./pages/Assign";
+import GiveTask from "./pages/GiveTask";
+import TaskPage from "./pages/Task/TaskPage";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
@@ -44,16 +44,23 @@ function App() {
               <Route path="/dashboard" element={<Dashboard user={user} />} />
               <Route path="/assign" element={<AssignTask />} />
               <Route path="/task" element={<TaskForm />} />
-              {
-                user?.role === "manager" || user?.role === "admin"?
-                <Route path='/give-task' element={<GiveTask user={user}/>} />:
-                null
-              }
+
+              {(user?.role === "manager" || user?.role === "admin") && (
+                <Route path="/give-task" element={<GiveTask user={user} />} />
+              )}
+
+              <Route path="/taskListing" element={<TaskPage />} />
             </>
           ) : (
             <>
-              <Route path="/dashboard" element={<p>Please login to view dashboard.</p>} />
-              <Route path="/assign" element={<p>Please login to view assigned tasks.</p>} />
+              <Route
+                path="/dashboard"
+                element={<p>Please login to view dashboard.</p>}
+              />
+              <Route
+                path="/assign"
+                element={<p>Please login to view assigned tasks.</p>}
+              />
               <Route path="/task" element={<p>Please login to add tasks.</p>} />
             </>
           )}

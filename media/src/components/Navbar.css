@@ -1,0 +1,56 @@
+/* Default: large screens - white text */
+.custom-btn {
+  color: white;
+  background-color: transparent;
+  border: 1px solid white;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.custom-btn:hover {
+  color: #1976d2;
+  background-color: white;
+  border-color: white;
+}
+
+.custom-btn-logout {
+  color: #1976d2;
+  background-color: white;
+  border: 1px solid white;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.custom-btn-logout:hover {
+  color: white;
+  background-color: #1565c0;
+  border-color: #1565c0;
+}
+
+/* Small screens (collapsed) */
+@media (max-width: 991.98px) {
+  .custom-btn {
+    color: black !important;
+    border-color: black !important;
+  }
+
+  .custom-btn:hover {
+    color: white !important;
+    background-color: black !important;
+    border-color: black !important;
+  }
+
+  .custom-btn-logout {
+    color: black !important;
+    background-color: #f8f9fa !important;
+    border-color: black !important;
+  }
+
+  .custom-btn-logout:hover {
+    color: white !important;
+    background-color: black !important;
+    border-color: black !important;
+  }
+}
