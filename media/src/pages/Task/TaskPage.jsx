@@ -122,13 +122,10 @@ function TaskPage() {
   };
 
   return (
-    <div className="container-fluid mt-5 mb-5" style={{width:"100%",}}>
+    <div className="container-fluid mt-4 mb-4 ">
       <TaskTable tasks={tasks} onMarkComplete={handleMarkComplete} />
     </div>
   );
 }
 
 export default TaskPage;
-
-
-

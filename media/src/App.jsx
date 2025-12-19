@@ -10,6 +10,7 @@ import { Container } from "@mui/material";
 import AssignTask from "./pages/Assign";
 import GiveTask from "./pages/GiveTask";
 import TaskPage from "./pages/Task/TaskPage";
+import DevicePage from "./pages/Device-details/DeviceDetail";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
@@ -35,7 +36,10 @@ function App() {
       <Container sx={{ mt: 4 }}>
         <Routes>
           {/* ✅ Public routes */}
-          <Route path="/" element={<Home user={user} />} />
+          <Route
+            path="/"
+            element={<Home user={user} isLooged={isLoggedIn} />}
+          />
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
 
           {/* ✅ Protected routes */}
@@ -44,6 +48,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard user={user} />} />
               <Route path="/assign" element={<AssignTask />} />
               <Route path="/task" element={<TaskForm />} />
+              <Route path="/deviveDetail" element={<DevicePage />} />
 
               {(user?.role === "manager" || user?.role === "admin") && (
                 <Route path="/give-task" element={<GiveTask user={user} />} />

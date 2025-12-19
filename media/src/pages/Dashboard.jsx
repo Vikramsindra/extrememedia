@@ -31,7 +31,7 @@ const Dashboard = ({ user }) => {
             py: 2,
             px: 3,
             borderRadius: 2,
-            marginTop: "30px"
+            marginTop: "100px",
           }}
         >
           ✅ Login successful — Welcome {user?.username}!
@@ -39,12 +39,10 @@ const Dashboard = ({ user }) => {
       </Snackbar>
 
       <div className="container-fluid">
-        <h1 className="mt-2 text-center fs-1 ">Analytics </h1>
-        <Anayalatic/>
+        <h1 className="mt-2 text-center fs-1 mb-3">Analytics </h1>
+        <Anayalatic />
       </div>
-      
     </div>
-
   );
 };
 

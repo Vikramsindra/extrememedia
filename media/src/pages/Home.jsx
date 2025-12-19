@@ -1,9 +1,22 @@
-import { Typography } from '@mui/material';
+import { Typography } from "@mui/material";
+import HomePage from "../components/home components/HomePage";
 
-const Home = () => (
+const Home = ({ user, isLooged }) => (
   <>
-    <Typography variant="h4" gutterBottom>Welcome to Home Page</Typography>
-    <Typography variant="body1">Use the navigation bar to login and start adding tasks.</Typography>
+    {isLooged ? (
+      <>
+        <HomePage />
+      </>
+    ) : (
+      <>
+        <Typography variant="h4" gutterBottom>
+          Welcome to Home Page
+        </Typography>
+        <Typography variant="body1">
+          Use the navigation bar to login and start adding tasks.
+        </Typography>
+      </>
+    )}
   </>
 );
 

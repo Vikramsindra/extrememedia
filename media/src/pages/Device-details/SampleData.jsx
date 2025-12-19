@@ -1,0 +1,161 @@
+export const devices = [
+  {
+    form1: {
+      deviceNo: "1001",
+      panelSide: "Left",
+      faultyPatch: "Patch A3",
+      faultyLocation: "Top Left Corner",
+      Date: "2025-03-12",
+    },
+    form2: {
+      barcode: "BC-987654321",
+      isStatus: "Faulty",
+      noOfDevice: 3,
+      enginerName: "Rahul Sharma",
+      noOfTp: 2,
+      noOfLed: 12,
+      debugEnginer: "Amit Verma",
+    },
+    form3: {
+      icQc: "Passed",
+      remark: "IC replaced successfully",
+      fullfitting: "Yes",
+      siliconApplying: "Done",
+    },
+    form5: {
+      deviceStatus: "Ready for Dispatch",
+      agingStatus: "Completed",
+      qcRemark: "All parameters OK",
+      note: "Handle with care",
+      dispatchDate: "2025-03-15",
+    },
+  },
+
+  {
+    form1: {
+      deviceNo: "1024",
+      panelSide: "Right",
+      faultyPatch: "Patch B1",
+      faultyLocation: "Bottom Center",
+      Date: "2025-03-18",
+    },
+    form2: {
+      barcode: "BC-123456789",
+      isStatus: "Under Debug",
+      noOfDevice: 5,
+      enginerName: "Neha Patel",
+      noOfTp: 4,
+      noOfLed: 20,
+      debugEnginer: "Suresh Kumar",
+    },
+    form3: {
+      icQc: "Pending",
+      remark: "Waiting for IC replacement",
+      fullfitting: "No",
+      siliconApplying: "Pending",
+    },
+    form5: {
+      deviceStatus: "Under Repair",
+      agingStatus: "Not Started",
+      qcRemark: "QC pending",
+      note: "Spare IC required",
+      dispatchDate: "",
+    },
+  },
+
+  {
+    form1: {
+      deviceNo: "1107",
+      panelSide: "Top",
+      faultyPatch: "Patch C2",
+      faultyLocation: "Center Area",
+      Date: "2025-03-22",
+    },
+    form2: {
+      barcode: "BC-456789123",
+      isStatus: "Faulty",
+      noOfDevice: 8,
+      enginerName: "Arjun Singh",
+      noOfTp: 6,
+      noOfLed: 30,
+      debugEnginer: "Vikram Rao",
+    },
+    form3: {
+      icQc: "Failed",
+      remark: "Multiple IC failures detected",
+      fullfitting: "No",
+      siliconApplying: "Not Applied",
+    },
+    form5: {
+      deviceStatus: "Rework Required",
+      agingStatus: "Failed",
+      qcRemark: "Send back to repair",
+      note: "Replace control board",
+      dispatchDate: "",
+    },
+  },
+
+  {
+    form1: {
+      deviceNo: "1189",
+      panelSide: "Bottom",
+      faultyPatch: "Patch D4",
+      faultyLocation: "Bottom Right",
+      Date: "2025-04-01",
+    },
+    form2: {
+      barcode: "BC-741852963",
+      isStatus: "OK",
+      noOfDevice: 1,
+      enginerName: "Pooja Mehta",
+      noOfTp: 1,
+      noOfLed: 8,
+      debugEnginer: "Karan Joshi",
+    },
+    form3: {
+      icQc: "Passed",
+      remark: "No issue found",
+      fullfitting: "Yes",
+      siliconApplying: "Done",
+    },
+    form5: {
+      deviceStatus: "Dispatched",
+      agingStatus: "Completed",
+      qcRemark: "Approved",
+      note: "",
+      dispatchDate: "2025-04-03",
+    },
+  },
+
+  {
+    form1: {
+      deviceNo: "1250",
+      panelSide: "Left",
+      faultyPatch: "Patch A1",
+      faultyLocation: "Top Center",
+      Date: "2025-04-05",
+    },
+    form2: {
+      barcode: "BC-963852741",
+      isStatus: "Faulty",
+      noOfDevice: 10,
+      enginerName: "Mohit Gupta",
+      noOfTp: 9,
+      noOfLed: 45,
+      debugEnginer: "Rakesh Nair",
+    },
+    form3: {
+      icQc: "Pending",
+      remark: "QC in progress",
+      fullfitting: "Partial",
+      siliconApplying: "In Progress",
+    },
+    form5: {
+      deviceStatus: "QC Hold",
+      agingStatus: "In Progress",
+      qcRemark: "Observation ongoing",
+      note: "High LED count device",
+      dispatchDate: "",
+    },
+  },
+];

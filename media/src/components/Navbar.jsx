@@ -99,14 +99,14 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
             <div className="d-flex flex-column flex-lg-row ms-auto">
               {isLoggedIn ? (
                 <>
-                  <button
+                  {/* <button
                     className="btn custom-btn mb-2 mb-lg-0 ms-lg-2"
                     onClick={() => navigate("/dashboard")}
                   >
                     Dashboard
-                  </button>
+                  </button> */}
 
-                  {user?.role === "manager" || user?.role === "admin" ? (
+                  {/* {user?.role === "manager" || user?.role === "admin" ? (
                     <button
                       className="btn custom-btn mb-2 mb-lg-0 ms-lg-2"
                       onClick={() => navigate("/give-task")}
@@ -120,9 +120,9 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                     >
                       <i className="bi bi-plus-circle me-1"></i> Assigned Task
                     </button>
-                  )}
+                  )} */}
 
-                  {user?.role === "manager" || user?.role === "admin" ? (
+                  {/* {user?.role === "manager" || user?.role === "admin" ? (
                     <button
                       className="btn custom-btn mb-2 mb-lg-0 ms-lg-2"
                       onClick={() => navigate("/taskListing")}
@@ -136,7 +136,7 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
                     >
                       <i className="bi bi-plus-circle me-1"></i> Add Task
                     </button>
-                  )}
+                  )} */}
 
                   <button
                     className="btn custom-btn-logout mb-2 mb-lg-0 ms-lg-2"
