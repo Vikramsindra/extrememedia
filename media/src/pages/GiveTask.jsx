@@ -1,169 +1,165 @@
 import { useState } from "react";
 import {
   Box,
-  Typography,
   TextField,
   Button,
-  Stack,
+  Typography,
   MenuItem,
-  Snackbar,
-  Alert,
+  Paper
 } from "@mui/material";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import TaskTable from "./Task/TaskListing";
 
-const GiveTask = ({ user }) => {
-  // ✅ Calculate tomorrow's date
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const defaultDueDate = tomorrow.toISOString().split("T")[0];
+const TASK_OPTIONS = [
+  "Full Opening",
+  "Silicone Removing",
+  "IC Removing, Tinning & Cleaning",
+  "Resister Removing",
+  "IC Replacing",
+  "Resister Replacing",
+  "Debugging",
+  "Rework",
+  "Applying Silicon (IC)",
+  "Applying Silicon (LEDs)",
+  "Half Fitting",
+  "Mesh Fitting",
+  "Full Fitting",
+  "QC",
+  "Back Glue Apply",
+  "Other"
+];
 
-  // ✅ Form state with assignee = logged-in user
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    assignee: user?.username || "",
-    assignedTo: "",
-    priority: "",
-    dueDate: defaultDueDate,
-  });
+const GiveTask = () => {
+  const [taskName, setTaskName] = useState("");
+  const [customTask, setCustomTask] = useState("");
+  const [description, setDescription] = useState("");
+  const [assignedBy, setAssignedBy] = useState("manager01");
+  const [assignedTo, setAssignedTo] = useState("");
+  const [priority, setPriority] = useState("");
+  const [dueDate, setDueDate] = useState("");
 
-  const [popup, setPopup] = useState({
-    open: false,
-    message: "",
-    severity: "info",
-  });
+  const isOtherSelected = taskName === "Other";
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const handleChange = (field) => (e) => {
-    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
-  };
+    const finalTaskName = isOtherSelected ? customTask : taskName;
 
+    const payload = {
+      taskName: finalTaskName,
+      description,
+      assignedBy,
+      assignedTo,
+      priority,
+      dueDate
+    };
 
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/task/taskcreate",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // ✅ sends session cookies
-          body: JSON.stringify(formData),
-        }
-      );
+    console.log("TASK DATA:", payload);
 
-      const result = await response.json();
-
-      if (response.ok) {
-        setPopup({
-          open: true,
-          message: result.message || "Task given successfully",
-          severity: "success",
-        });
-        setFormData({
-          title: "",
-          description: "",
-          assignee: user?.username || "",
-          assignedTo: "",
-          priority: "",
-          dueDate: defaultDueDate,
-        });
-      } else {
-        setPopup({
-          open: true,
-          message: result.error || "Something went wrong",
-          severity: "error",
-        });
-        console.log(result);
-      }
-    } catch (err) {
-      setPopup({
-        open: true,
-        message: "Network error",
-        severity: "error",
-      });
-    }
+    // 🔗 Later you can send this to backend
+    // fetch("/api/task", { method: "POST", body: JSON.stringify(payload) })
   };
 
   return (
-    <div className="container">
-      <Box sx={{ p: 4 }}>
-        <Box display="flex" alignItems="center" gap={1} mb={2}>
-          <AssignmentTurnedInIcon color="primary" fontSize="large" />
-          <Typography variant="h5" fontWeight="bold">
-            Give Task
-          </Typography>
-        </Box>
+    <Box sx={{ p: 4 }}>
+      <Paper sx={{ maxWidth: 600, mx: "auto", p: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          ✅ Give Task
+        </Typography>
 
-        <Stack spacing={2} sx={{ maxWidth: 600 }}>
+        <form onSubmit={handleSubmit}>
+          {/* TASK NAME DROPDOWN */}
           <TextField
-            label="Task Title"
+            label="Task Name"
+            select
             fullWidth
-            value={formData.title}
-            onChange={handleChange("title")}
-          />
+            margin="normal"
+            value={taskName}
+            onChange={(e) => setTaskName(e.target.value)}
+            required
+          >
+            {TASK_OPTIONS.map((task) => (
+              <MenuItem key={task} value={task}>
+                {task}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          {/* SHOW ONLY IF "OTHER" */}
+          {isOtherSelected && (
+            <TextField
+              label="Custom Task Name"
+              fullWidth
+              margin="normal"
+              value={customTask}
+              onChange={(e) => setCustomTask(e.target.value)}
+              required
+            />
+          )}
+
           <TextField
             label="Description"
             fullWidth
+            margin="normal"
             multiline
             rows={3}
-            value={formData.description}
-            onChange={handleChange("description")}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
+
           <TextField
-            label="Assignee"
+            label="Assigned By"
             fullWidth
-            value={formData.assignee}
+            margin="normal"
+            value={assignedBy}
             disabled
           />
+
           <TextField
             label="Assigned To"
             fullWidth
-            value={formData.assignedTo}
-            onChange={handleChange("assignedTo")}
-            placeholder="e.g. Electrical Team, Project A"
+            margin="normal"
+            value={assignedTo}
+            onChange={(e) => setAssignedTo(e.target.value)}
+            required
           />
+
           <TextField
             label="Priority"
             select
             fullWidth
-            value={formData.priority}
-            onChange={handleChange("priority")}
+            margin="normal"
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+            required
           >
             <MenuItem value="Low">Low</MenuItem>
             <MenuItem value="Medium">Medium</MenuItem>
             <MenuItem value="High">High</MenuItem>
           </TextField>
+
           <TextField
             label="Due Date"
             type="date"
             fullWidth
-            value={formData.dueDate}
-            onChange={handleChange("dueDate")}
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            required
           />
-          <Button variant="contained" onClick={handleSubmit}>
-            Give Task
-          </Button>
-        </Stack>
 
-        <Snackbar
-          open={popup.open}
-          autoHideDuration={4000}
-          onClose={() => setPopup({ ...popup, open: false })}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert
-            severity={popup.severity}
-            onClose={() => setPopup({ ...popup, open: false })}
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{ mt: 3 }}
           >
-            {popup.message}
-          </Alert>
-        </Snackbar>
-      </Box>
-    </div>
+            GIVE TASK
+          </Button>
+        </form>
+      </Paper>
+    </Box>
   );
 };
 
 export default GiveTask;
+

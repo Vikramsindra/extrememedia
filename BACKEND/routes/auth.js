@@ -1,19 +1,30 @@
-const express = require('express');
-const passport = require('passport');
-const{ loginSuccess , logout} = require('../controllers/authControllers');
+const express = require("express");
+const passport = require("passport");
 
 const router = express.Router();
 
-router.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) return next(err);
-    if (!user) {
-      return res.status(401).json({ message: info?.message || 'Unauthorized' }); // ✅ JSON error
+router.post("/login", (req, res, next) => {
+  console.log("LOGIN BODY:", req.body);
+
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      console.error("Passport error:", err);
+      return res.status(500).json({ message: "Server error" });
     }
+
+    if (!user) {
+      return res
+        .status(401)
+        .json({ message: info?.message || "Invalid credentials" });
+    }
+
     req.logIn(user, (err) => {
-      if (err) return next(err);
+      if (err) {
+        console.error("Login error:", err);
+        return res.status(500).json({ message: "Login failed" });
+      }
+
       return res.json({
-        message: 'Login Successful',
         user: {
           id: user.id,
           username: user.username,
@@ -24,6 +35,10 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
-router.get('/logout',logout);
+router.post("/logout", (req, res) => {
+  req.logout(() => {
+    res.json({ message: "Logged out" });
+  });
+});
 
-module.exports=router;
+module.exports = router;

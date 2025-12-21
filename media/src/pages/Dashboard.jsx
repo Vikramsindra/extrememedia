@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Typography, Snackbar, Alert, Box, Avatar } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { useLocation } from "react-router-dom";
-import Anayalatic from "../components/Graphs/AnayalticPage";
+import Anayalatic from "../components/Graphs/AnalyticPage";
 
 const Dashboard = ({ user }) => {
   const location = useLocation();

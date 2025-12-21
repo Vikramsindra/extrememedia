@@ -4,7 +4,7 @@ const passport = require('passport');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
 const cors = require('cors');
-const task = require('./routes/task');
+const taskRoutes = require('./routes/task');
 
 dotenv.config();
 const app = express();
@@ -12,29 +12,39 @@ const app = express();
 // ✅ Initialize Passport strategy BEFORE routes
 require('./config/passport')(passport);
 
+// ✅ Body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// ✅ CORS (flexible for Vite ports like 5173 / 5174)
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
+
+// ✅ Sessions
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET || 'dev-secret',
   resave: false,
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: false, // set to true if using HTTPS
+    secure: false, // set true only in HTTPS
     sameSite: 'lax'
   }
 }));
-app.use(cors({
-  origin: 'http://localhost:5173', // your frontend origin
-  credentials: true // 🔐 allows cookies/session to be sent
-}));
 
-
+// ✅ Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
-// ✅ Register routes AFTER passport is ready
+// 🔹 Health check route (TEMP / useful)
+app.get('/api/test', (req, res) => {
+  res.send('Backend OK');
+});
+
+// ✅ Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/task',task);
+app.use('/api/task', taskRoutes);
 
 module.exports = app;
