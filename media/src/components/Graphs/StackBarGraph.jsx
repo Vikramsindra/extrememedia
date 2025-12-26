@@ -30,7 +30,7 @@ export default function StackedBarGraphComponent({
 
           <div style={{ width: "100%", height: height - 100 }}>
             <ResponsiveContainer>
-              <BarChart data={data} barCategoryGap="20%" >
+              <BarChart data={data} barCategoryGap="20%">
                 <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
                 <XAxis dataKey={xKey} tick={{ fill: "#555" }} />
                 <YAxis tick={{ fill: "#555" }} />

@@ -1,51 +1,29 @@
-import { useNavigate } from "react-router-dom";
-import "./Cards.css";
+import React from "react";
+import { Link } from "react-router-dom";
 
-
-
-const Cards = () => {
-  const navigate = useNavigate();
-
+const Card = ({ img, title, btn, navi }) => {
   return (
-    <div className="cards-container">
-      {/* Analytics */}
-      <div className="card">
-        <img src="/img/analytics.png" alt="Analytics" />
-        <h3>See Analytics</h3>
-        <button onClick={() => navigate("/analytics")}>
-          View Analytics
-        </button>
+    <div className="card" style={{ width: "16rem", borderRadius: "10%" }}>
+      <div className="text-center mt-3">
+        <img
+          src={img}
+          className="card-img-top"
+          alt={title}
+          style={{ width: "12rem" }}
+        />
       </div>
 
-      {/* Task Queue */}
-      <div className="card">
-        <img src="/img/taskqueue.avif" alt="Task Queue" />
-        <h3>Task Queue</h3>
-        <button onClick={() => navigate("/task")}>
-          Check Queue
-        </button>
-      </div>
+      <div className="card-body">
+        <h5 className="card-title text-center mb-5">{title}</h5>
 
-      {/* Assign Task */}
-      <div className="card">
-        <img src="/img/task asign.png" alt="Assign Task" />
-        <h3>Assign Task</h3>
-        <button onClick={() => navigate("/give-task")}>
-          Assign Task
-        </button>
-      </div>
-
-      {/* 🔥 NEW INVENTORY CARD */}
-      <div className="card">
-        <img src="/img/searchDevice2.jpg" alt="Inventory" />
-        <h3>Inventory</h3>
-        <button onClick={() => navigate("/inventory")}>
-          Add Inventory
-        </button>
+        <div className="text-center">
+          <Link to={navi} className="btn btn-primary">
+            {btn}
+          </Link>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Cards;
-
+export default Card;

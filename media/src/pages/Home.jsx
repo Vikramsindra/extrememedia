@@ -1,4 +1,5 @@
 import Cards from "../components/home components/Cards";
+import HomePage from "../components/home components/HomePage";
 
 const Home = ({ isLoggedIn, user }) => {
   return (
@@ -11,7 +12,7 @@ const Home = ({ isLoggedIn, user }) => {
       ) : (
         <>
           <h2>Welcome, {user?.username}</h2>
-          <Cards />
+          <HomePage />
         </>
       )}
     </div>

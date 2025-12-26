@@ -29,17 +29,24 @@ function HomePage() {
               navi="/give-task"
             />
           </div>
+          <div className="col mb-3">
+            <Card
+              img="\img\Inventory.png"
+              title="Inventory"
+              btn="Add Inventory"
+              navi="/inventory"
+            />
+          </div>
         </div>
-        <div className="row mt-3">
+        <div className="row mt-5">
           <div className="col mb-3">
             <Card
               img="\img\searchDevice2.jpg"
               title="Search Device Detail"
               btn="Search"
-              navi="/deviveDetail"
+              navi="/deviceDetail"
             />
           </div>
-          <div className="col mb-3"></div>
           <div className="col mb-3"></div>
         </div>
       </div>

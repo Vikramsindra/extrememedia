@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -6,8 +6,7 @@ import {
   Typography,
   Box,
   MenuItem,
-  Snackbar,
-  Alert
+  Alert,
 } from "@mui/material";
 
 const Login = ({ onLogin }) => {
@@ -16,10 +15,20 @@ const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("technician");
+  const [msg, setMsg] = useState("");
+  const timerRef = useRef(null);
 
-  const [popupMessage, setPopupMessage] = useState("");
-  const [popupSeverity, setPopupSeverity] = useState("info");
-  const [showPopup, setShowPopup] = useState(false);
+  const showMsg = (message) => {
+    setMsg(message);
+
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    timerRef.current = setTimeout(() => {
+      setMsg("");
+    }, 3000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,37 +38,33 @@ const Login = ({ onLogin }) => {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, role })
+        body: JSON.stringify({ username, password, role }),
       });
 
-      let data = {};
-      try {
-        data = await res.json();
-      } catch {
-        data = { message: "Server error. Invalid response." };
-      }
+      const data = await res.json();
 
       if (!res.ok) {
         throw new Error(data.message || "Login failed");
       }
 
       onLogin(data.user);
-
-      setPopupMessage(`Welcome ${data.user.username}`);
-      setPopupSeverity("success");
-      setShowPopup(true);
-
-      setTimeout(() => navigate("/dashboard"), 1000);
+      navigate("/");
     } catch (err) {
+      showMsg(err.message); // ✅ correct
       console.error("Login error:", err);
-      setPopupMessage(err.message);
-      setPopupSeverity("error");
-      setShowPopup(true);
     }
   };
 
   return (
-    <Box sx={{ maxWidth: 400, mx: "auto", mt: 6, p: 3, border: "2px solid black", borderRadius: 2 }}>
+    <Box
+      sx={{
+        maxWidth: 400,
+        mx: "auto",
+        mt: 6,
+        p: 3,
+        borderRadius: 2,
+      }}
+    >
       <Typography variant="h5" gutterBottom>
         Login
       </Typography>
@@ -97,21 +102,16 @@ const Login = ({ onLogin }) => {
           <MenuItem value="admin">Admin</MenuItem>
         </TextField>
 
+        {msg && (
+          <Alert variant="filled" severity="error" sx={{ mt: 3 }}>
+            {msg}
+          </Alert>
+        )}
+
         <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
           Login
         </Button>
       </form>
-
-      <Snackbar
-        open={showPopup}
-        autoHideDuration={4000}
-        onClose={() => setShowPopup(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity={popupSeverity} sx={{ width: "100%" }}>
-          {popupMessage}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };

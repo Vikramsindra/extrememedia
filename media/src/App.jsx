@@ -13,7 +13,7 @@ import GiveTask from "./pages/GiveTask";
 import TaskForm from "./components/TaskForm/TaskForm";
 import TaskPage from "./pages/Task/TaskPage";
 import DevicePage from "./pages/Device-details/DeviceDetail";
-import Inventory from "./pages/Inventory";
+import Inventory from "./pages/Inventory-mangement/InventoryPage";
 
 // ✅ FIXED import (case-sensitive)
 import AnalyticPage from "./components/Graphs/AnalyticPage";
@@ -62,18 +62,12 @@ function App() {
               {/* Manager / Admin only */}
               {(user?.role === "manager" || user?.role === "admin") && (
                 <>
-                  <Route
-                    path="/give-task"
-                    element={<GiveTask user={user} />}
-                  />
+                  <Route path="/give-task" element={<GiveTask user={user} />} />
                   <Route
                     path="/inventory"
                     element={<Inventory user={user} />}
                   />
-                  <Route
-                    path="/analytics"
-                    element={<AnalyticPage />}
-                  />
+                  <Route path="/analytics" element={<AnalyticPage />} />
                 </>
               )}
             </>
@@ -87,10 +81,7 @@ function App() {
                 path="/assign"
                 element={<p>Please login to view assigned tasks.</p>}
               />
-              <Route
-                path="/task"
-                element={<p>Please login to add tasks.</p>}
-              />
+              <Route path="/task" element={<p>Please login to add tasks.</p>} />
               <Route
                 path="/inventory"
                 element={<p>Please login to view inventory.</p>}
