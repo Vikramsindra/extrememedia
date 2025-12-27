@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container } from "@mui/material";
 
 import Navbar from "./components/Navbar";
@@ -31,6 +31,24 @@ function App() {
     setIsLoggedIn(false);
     setUser(null);
   };
+
+  useEffect(() => {
+    fetch("/api/auth/me", {
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Not logged in");
+        return res.json();
+      })
+      .then((data) => {
+        setIsLoggedIn(true);
+        setUser(data.user);
+      })
+      .catch(() => {
+        setIsLoggedIn(false);
+        setUser(null);
+      });
+  }, []);
 
   return (
     <BrowserRouter>

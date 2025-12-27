@@ -4,9 +4,6 @@ import "./Navbar.css"; // custom styles for hover and colors
 
 const Navbar = ({ isLoggedIn, onLogout, user }) => {
   const navigate = useNavigate();
-  const [popupMessage, setPopupMessage] = useState("");
-  const [popupSeverity, setPopupSeverity] = useState("info");
-  const [showPopup, setShowPopup] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleLogout = async () => {
@@ -18,14 +15,7 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
       const data = await res.json();
       onLogout();
       navigate("/");
-      setPopupMessage(data.message || "Logged out successfully");
-      setPopupSeverity("success");
-      setShowPopup(true);
-    } catch (err) {
-      setPopupMessage("Logout failed");
-      setPopupSeverity("danger");
-      setShowPopup(true);
-    }
+    } catch (err) {}
   };
 
   const handleSearch = (e) => {
@@ -157,27 +147,6 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
           </div>
         </div>
       </nav>
-
-      {/* Popup / Alert */}
-      {showPopup && (
-        <div
-          className="position-fixed top-0 start-50 translate-middle-x mt-3"
-          style={{ zIndex: 1055, minWidth: "250px" }}
-        >
-          <div
-            className={`alert alert-${popupSeverity} alert-dismissible fade show text-center`}
-            role="alert"
-          >
-            {popupMessage}
-            <button
-              type="button"
-              className="btn-close"
-              aria-label="Close"
-              onClick={() => setShowPopup(false)}
-            ></button>
-          </div>
-        </div>
-      )}
     </>
   );
 };

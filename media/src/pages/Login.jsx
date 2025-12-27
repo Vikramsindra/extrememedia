@@ -9,26 +9,16 @@ import {
   Alert,
 } from "@mui/material";
 
+import useAutoClearMessage from "../Hooks/ShowMsg";
+
 const Login = ({ onLogin }) => {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("technician");
-  const [msg, setMsg] = useState("");
-  const timerRef = useRef(null);
 
-  const showMsg = (message) => {
-    setMsg(message);
-
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-
-    timerRef.current = setTimeout(() => {
-      setMsg("");
-    }, 3000);
-  };
+  const { msg, showMsg } = useAutoClearMessage(5000);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,13 +51,20 @@ const Login = ({ onLogin }) => {
         maxWidth: 400,
         mx: "auto",
         mt: 6,
-        p: 3,
+        p: 4,
         borderRadius: 2,
+        border: "4px double black",
       }}
     >
       <Typography variant="h5" gutterBottom>
         Login
       </Typography>
+
+      {msg && (
+        <Alert variant="filled" severity="error" sx={{ mt: 3, mb: 3 }}>
+          {msg}
+        </Alert>
+      )}
 
       <form onSubmit={handleSubmit}>
         <TextField
@@ -101,13 +98,6 @@ const Login = ({ onLogin }) => {
           <MenuItem value="manager">Manager</MenuItem>
           <MenuItem value="admin">Admin</MenuItem>
         </TextField>
-
-        {msg && (
-          <Alert variant="filled" severity="error" sx={{ mt: 3 }}>
-            {msg}
-          </Alert>
-        )}
-
         <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
           Login
         </Button>

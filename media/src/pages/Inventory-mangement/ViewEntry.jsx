@@ -3,25 +3,13 @@ import Table from "./Table";
 import { useState, useRef } from "react";
 import { sampleData, header } from "./SampleData";
 import { Alert } from "@mui/material";
+import useAutoClearMessage from "../../Hooks/ShowMsg";
 
 function View() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [selectedData, setSelectedData] = useState([]);
-  const [msg, setMsg] = useState("");
-  const timerRef = useRef(null);
-
-  const showMsg = (message) => {
-    setMsg(message);
-
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-
-    timerRef.current = setTimeout(() => {
-      setMsg("");
-    }, 3000);
-  };
+  const { errMsg, showErrMsg } = useAutoClearMessage(5000);
 
   const handleSearch = () => {
     const foundData = sampleData.filter((obj) => {
@@ -32,10 +20,9 @@ function View() {
 
     if (foundData.length > 0) {
       setSelectedData(foundData);
-      showMsg("");
     } else {
       setSelectedData([]);
-      showMsg("For Given Range of Date data is not available");
+      showErrMsg("For Given Range of Date data is not available");
     }
   };
 
@@ -57,7 +44,7 @@ function View() {
         </div>
       )}
 
-      {msg && (
+      {errMsg && (
         <div className="msg">
           <Alert variant="filled" severity="error" sx={{ width: "70%" }}>
             {msg}

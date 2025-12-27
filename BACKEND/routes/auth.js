@@ -35,6 +35,20 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
+router.get("/me", (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.json({
+      user: {
+        id: req.user.id,
+        username: req.user.username,
+        role: req.user.role
+      }
+    });
+  }
+  res.status(401).json({ message: "Not authenticated" });
+});
+
+
 router.post("/logout", (req, res) => {
   req.logout(() => {
     res.json({ message: "Logged out" });
