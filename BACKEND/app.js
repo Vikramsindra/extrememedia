@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
 const cors = require('cors');
 const taskRoutes = require('./routes/task');
+const dataRoute = require("./routes/DataRoute");
 
 dotenv.config();
 const app = express();
@@ -46,5 +47,6 @@ app.get('/api/test', (req, res) => {
 // ✅ Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/task', taskRoutes);
+app.use('/api/data', dataRoute);
 
 module.exports = app;

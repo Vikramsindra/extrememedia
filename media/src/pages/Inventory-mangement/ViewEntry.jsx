@@ -1,9 +1,10 @@
 import Search from "./Searching";
 import Table from "./Table";
-import { useState, useRef } from "react";
-import { sampleData, header, columns } from "./SampleData";
+import { useState } from "react";
+import { columns } from "./SampleData";
 import { Alert } from "@mui/material";
 import useAutoClearMessage from "../../Hooks/ShowMsg";
+import { fetchBulkEntryData } from "../../services/dataService";
 
 function View() {
   const [fromDate, setFromDate] = useState("");
@@ -11,24 +12,22 @@ function View() {
   const [selectedData, setSelectedData] = useState([]);
   const { msg, showMsg } = useAutoClearMessage(5000);
 
-  const handleSearch = () => {
-    const foundData = sampleData.filter((obj) => {
-      const [d, m, y] = obj.date.split("-");
-      const objDate = `${y}-${m}-${d}`;
-      return objDate >= fromDate && objDate <= toDate;
-    });
-
-    if (foundData.length > 0) {
-      setSelectedData(foundData);
-    } else {
+  const handleSearch = async () => {
+    try {
+      const res = await fetchBulkEntryData(fromDate, toDate);
+      setSelectedData(res.data);
+    } catch (error) {
       setSelectedData([]);
-      showMsg("For Given Range of Date data is not available");
+      showMsg(
+        error.response?.data?.message ||
+          "For given date range, data is not available"
+      );
     }
   };
 
   return (
     <div className="container-fluid">
-      <div className="row mb-5 text-center mt-3 border-top ">
+      <div className="row mb-5 text-center mt-3 border-top">
         <Search
           toDate={toDate}
           fromDate={fromDate}
@@ -45,7 +44,7 @@ function View() {
       )}
 
       {msg && (
-        <div className="msg">
+        <div className="msg text-center">
           <Alert variant="filled" severity="error" sx={{ width: "70%" }}>
             {msg}
           </Alert>
