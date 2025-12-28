@@ -1,18 +1,18 @@
 import Search from "./Searching";
+import { useState } from "react";
+import { inventoryData, inventoryColumns } from "./SampleData";
 import Table from "./Table";
-import { useState, useRef } from "react";
-import { sampleData, header, columns } from "./SampleData";
-import { Alert } from "@mui/material";
 import useAutoClearMessage from "../../Hooks/ShowMsg";
+import { Alert } from "@mui/material";
 
-function View() {
+function Summary() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [selectedData, setSelectedData] = useState([]);
   const { msg, showMsg } = useAutoClearMessage(5000);
 
   const handleSearch = () => {
-    const foundData = sampleData.filter((obj) => {
+    const foundData = inventoryData.filter((obj) => {
       const [d, m, y] = obj.date.split("-");
       const objDate = `${y}-${m}-${d}`;
       return objDate >= fromDate && objDate <= toDate;
@@ -27,11 +27,12 @@ function View() {
   };
 
   return (
-    <div className="container-fluid">
-      <div className="row mb-5 text-center mt-3 border-top ">
+    <>
+      <h1 className="text-center mt-4 fs-4">Summary </h1>
+      <div className="border-top mt-2 text-center">
         <Search
-          toDate={toDate}
           fromDate={fromDate}
+          toDate={toDate}
           setFromDate={setFromDate}
           setToDate={setToDate}
           onSubmit={handleSearch}
@@ -39,9 +40,7 @@ function View() {
       </div>
 
       {selectedData.length > 0 && (
-        <div className="row mt-5 border-top">
-          <Table data={selectedData} columns={columns} />
-        </div>
+        <Table data={selectedData} columns={inventoryColumns} />
       )}
 
       {msg && (
@@ -51,8 +50,8 @@ function View() {
           </Alert>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
-export default View;
+export default Summary;

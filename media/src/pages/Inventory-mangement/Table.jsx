@@ -9,28 +9,31 @@ import {
   Typography,
 } from "@mui/material";
 
-function Table({ data, header }) {
+function Table({ data, columns, title = "Inventory Transactions" }) {
   return (
     <div className="container-fluid mb-5 mt-4">
       <Typography variant="h6" gutterBottom>
-        Inventory Transactions
+        {title}
       </Typography>
 
       <TableContainer component={Paper} elevation={4}>
         <MuiTable size="small">
+          {/* Table Header */}
           <TableHead sx={{ backgroundColor: "#4f81bd" }}>
             <TableRow>
-              {header.map((head) => (
+              {columns.map((col) => (
                 <TableCell
-                  key={head}
+                  key={col.field}
+                  align={col.align || "left"}
                   sx={{ color: "#fff", fontWeight: "bold" }}
                 >
-                  {head}
+                  {col.label}
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
 
+          {/* Table Body */}
           <TableBody>
             {data.map((row, index) => (
               <TableRow
@@ -39,15 +42,11 @@ function Table({ data, header }) {
                   backgroundColor: index % 2 === 0 ? "#e8f0fa" : "#c7d9ed",
                 }}
               >
-                <TableCell>{row.date}</TableCell>
-                <TableCell>{row.client}</TableCell>
-                <TableCell>{row.batch}</TableCell>
-                <TableCell>{row.lot}</TableCell>
-                <TableCell>{row.type}</TableCell>
-                <TableCell>{row.qty}</TableCell>
-                <TableCell>{row.reason}</TableCell>
-                <TableCell>{row.rcdc}</TableCell>
-                <TableCell>{row.remarks}</TableCell>
+                {columns.map((col) => (
+                  <TableCell key={col.field} align={col.align || "left"}>
+                    {row[col.field]}
+                  </TableCell>
+                ))}
               </TableRow>
             ))}
           </TableBody>

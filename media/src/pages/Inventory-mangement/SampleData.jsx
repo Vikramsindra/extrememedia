@@ -144,3 +144,87 @@ export const header = [
   "RC/DC No",
   "Remarks",
 ];
+
+export const columns = [
+  { label: "Date", field: "date" },
+  { label: "Client", field: "client" },
+  { label: "Batch No", field: "batch" },
+  { label: "Lot No", field: "lot" },
+  { label: "Tran Type", field: "type" },
+  { label: "Qty", field: "qty", align: "right" },
+  { label: "Return Reason", field: "reason" },
+  { label: "RC/DC No", field: "rcdc" },
+  { label: "Remarks", field: "remarks" },
+];
+
+// for summary
+
+export const inventoryData = [
+  {
+    date: "05-03-2025",
+    batch: "DX128",
+    lot: 1,
+    received: 110,
+    dispatch: 108,
+    returnQty: 96,
+    redispatch: 85,
+    balance: 13,
+    returnPct: "89%",
+  },
+  {
+    date: "30-03-2025",
+    batch: "DX128",
+    lot: 2,
+    received: 150,
+    dispatch: 150,
+    returnQty: 0,
+    redispatch: 0,
+    balance: 0,
+    returnPct: "0%",
+  },
+  {
+    date: "17-04-2025",
+    batch: "DX109",
+    lot: 3,
+    received: 48,
+    dispatch: 48,
+    returnQty: 0,
+    redispatch: 0,
+    balance: 0,
+    returnPct: "0%",
+  },
+  {
+    date: "12-06-2025",
+    batch: "DX128",
+    lot: 4,
+    received: 300,
+    dispatch: 300,
+    returnQty: 33,
+    redispatch: 33,
+    balance: 0,
+    returnPct: "11%",
+  },
+  {
+    date: "08-07-2025",
+    batch: "DX109",
+    lot: 5,
+    received: 100,
+    dispatch: 17,
+    returnQty: 0,
+    redispatch: 0,
+    balance: 83,
+    returnPct: "0%",
+  },
+];
+
+export const inventoryColumns = [
+  { label: "Date", field: "date" },
+  { label: "Batch No", field: "batch" },
+  { label: "Lot No", field: "lot", align: "center" },
+  { label: "Received Qty", field: "received", align: "right" },
+  { label: "Dispatch Qty", field: "dispatch", align: "right" },
+  { label: "Return Qty", field: "returnQty", align: "right" },
+  { label: "Re-Dispatch Qty", field: "redispatch", align: "right" },
+  { label: "Balance Qty", field: "balance", align: "right" },
+  { label: "Return %", field: "returnPct", align: "right" },
+];

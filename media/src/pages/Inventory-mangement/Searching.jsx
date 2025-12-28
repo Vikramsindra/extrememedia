@@ -9,35 +9,21 @@ import {
   MenuItem,
 } from "@mui/material";
 
+import useAutoClearMessage from "../../Hooks/ShowMsg";
+
 function Search({ fromDate, toDate, setFromDate, setToDate, onSubmit }) {
-  const [msg, setMsg] = useState("");
-  const timerRef = useRef(null);
-
-  const showError = (message) => {
-    setMsg(message);
-
-    // clear previous timer if exists
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-
-    timerRef.current = setTimeout(() => {
-      setMsg("");
-    }, 3000); // ⏱️ 3 seconds
-  };
+  const { msg, showMsg } = useAutoClearMessage(3000);
 
   const handleSearch = () => {
     if (!fromDate || !toDate) {
-      showError("Please select both From Date and Till Date");
+      showMsg("Please select both From Date and Till Date");
       return;
     }
 
     if (fromDate > toDate) {
-      showError("From Date cannot be greater than Till Date");
+      showMsg("From Date cannot be greater than Till Date");
       return;
     }
-
-    setMsg("");
     onSubmit();
     console.log("Searching from:", fromDate, "to:", toDate);
   };
@@ -58,6 +44,7 @@ function Search({ fromDate, toDate, setFromDate, setToDate, onSubmit }) {
           gap: 2,
           alignItems: "center",
           flexWrap: "wrap",
+          justifyContent: "center",
         }}
       >
         <TextField

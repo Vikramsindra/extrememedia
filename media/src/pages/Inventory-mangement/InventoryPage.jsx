@@ -2,6 +2,7 @@ import { Box, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import InventoryFrom from "./InventoryForm";
 import View from "./ViewEntry";
+import Summary from "./Summary";
 
 function InventoryPage() {
   const [formData, setFormData] = useState({
@@ -48,6 +49,12 @@ function InventoryPage() {
               fontWeight: currentTab === 1 ? "bold" : "normal",
             }}
           />
+          <Tab
+            label="Summary Batch Wise"
+            sx={{
+              fontWeight: currentTab === 2 ? "bold" : "normal",
+            }}
+          />
         </Tabs>
         {currentTab == 0 && (
           <InventoryFrom
@@ -57,6 +64,7 @@ function InventoryPage() {
           />
         )}
         {currentTab == 1 && <View />}
+        {currentTab == 2 && <Summary />}
       </Box>
     </>
   );

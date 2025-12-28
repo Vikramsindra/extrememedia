@@ -1,34 +1,8 @@
 import { useState, useMemo } from "react";
-import {
-  Box,
-  Typography,
-  TextField,
-  MenuItem,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Tabs,
-  Tab,
-} from "@mui/material";
+import { Box, Tabs, Tab } from "@mui/material";
 
 import StackBarGraph from "./StackBarGraph";
-
-/* 🔹 MOCK INVENTORY DATA */
-const MOCK_INVENTORY = [
-  { date: "12/5/2025", batchNo: "DX214", lotNo: 10, tranType: "IN", qty: 40 },
-  {
-    date: "12/13/2025",
-    batchNo: "DX214",
-    lotNo: 10,
-    tranType: "DISPATCH",
-    qty: 5,
-  },
-  { date: "12/13/2025", batchNo: "DX214", lotNo: 11, tranType: "IN", qty: 15 },
-];
+import InventorySummary from "./IInventorySumarry";
 
 /* 🔹 GRAPH DATA */
 const dx128Data = [
@@ -73,66 +47,12 @@ const dx214Data = [
 const BATCHES = ["DX109", "DX128", "DX214"];
 
 const AnalyticPage = () => {
-  const [selectedBatch, setSelectedBatch] = useState("DX214");
   const [graphTab, setGraphTab] = useState(2);
-
-  /* 🔹 Filter inventory */
-  const batchData = useMemo(
-    () => MOCK_INVENTORY.filter((i) => i.batchNo === selectedBatch),
-    [selectedBatch]
-  );
-
-  /* 🔹 Table rows */
-  const tableRows = useMemo(() => {
-    const map = {};
-
-    batchData.forEach((item) => {
-      const key = `${item.date}-${item.lotNo}`;
-      if (!map[key]) {
-        map[key] = {
-          date: item.date,
-          batchNo: item.batchNo,
-          lotNo: item.lotNo,
-          received: 0,
-          dispatch: 0,
-          returned: 0,
-          redispatch: 0,
-        };
-      }
-
-      if (item.tranType === "IN") map[key].received += item.qty;
-      if (item.tranType === "DISPATCH") map[key].dispatch += item.qty;
-    });
-
-    return Object.values(map).map((row) => {
-      const balance = row.received - row.dispatch;
-      return {
-        ...row,
-        balance,
-        returnPercent: row.received
-          ? Math.round((row.returned / row.received) * 100)
-          : 0,
-      };
-    });
-  }, [batchData]);
-
-  /* 🔹 Totals */
-  const totals = useMemo(() => {
-    return tableRows.reduce(
-      (acc, r) => {
-        acc.received += r.received;
-        acc.dispatch += r.dispatch;
-        acc.balance += r.balance;
-        return acc;
-      },
-      { received: 0, dispatch: 0, balance: 0 }
-    );
-  }, [tableRows]);
 
   return (
     <div className="container">
       {/* 🔹 GRAPH TABS */}
-      <Box sx={{ mb: 4 }}>
+      <Box sx={{ mb: 5, mt: 5 }}>
         <Tabs value={graphTab} onChange={(_, v) => setGraphTab(v)}>
           <Tab label="DX109" />
           <Tab label="DX128" />
@@ -174,66 +94,9 @@ const AnalyticPage = () => {
         )}
       </Box>
 
-      {/* 🔹 TABLE */}
-      <Typography variant="h4" gutterBottom>
-        Inventory Analytics
-      </Typography>
-
-      <Box sx={{ maxWidth: 300, mb: 3 }}>
-        <TextField
-          select
-          label="Select Batch No"
-          fullWidth
-          value={selectedBatch}
-          onChange={(e) => {
-            const val = e.target.value;
-            setSelectedBatch(val);
-            setGraphTab(BATCHES.indexOf(val));
-          }}
-        >
-          {BATCHES.map((b) => (
-            <MenuItem key={b} value={b}>
-              {b}
-            </MenuItem>
-          ))}
-        </TextField>
+      <Box>
+        <InventorySummary />
       </Box>
-
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead sx={{ background: "#1976d2" }}>
-            <TableRow>
-              {["Date", "Batch", "Lot", "Received", "Dispatch", "Balance"].map(
-                (h) => (
-                  <TableCell key={h} sx={{ color: "#fff", fontWeight: "bold" }}>
-                    {h}
-                  </TableCell>
-                )
-              )}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {tableRows.map((r, i) => (
-              <TableRow key={i}>
-                <TableCell>{r.date}</TableCell>
-                <TableCell>{r.batchNo}</TableCell>
-                <TableCell>{r.lotNo}</TableCell>
-                <TableCell>{r.received}</TableCell>
-                <TableCell>{r.dispatch}</TableCell>
-                <TableCell>{r.balance}</TableCell>
-              </TableRow>
-            ))}
-            <TableRow sx={{ background: "#f0f0f0" }}>
-              <TableCell colSpan={3} fontWeight="bold">
-                TOTAL
-              </TableCell>
-              <TableCell>{totals.received}</TableCell>
-              <TableCell>{totals.dispatch}</TableCell>
-              <TableCell>{totals.balance}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
     </div>
   );
 };
