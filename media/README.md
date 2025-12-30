@@ -1,16 +1,71 @@
-# React + Vite
+# Media Folder Structure
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This folder contains all media-related files, HTML, CSS, JavaScript, and React components for the **ExtremeMedia** project.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📁 Folder Structure
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```text
+media/
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── README.md
+├── vite.config.js
+├── public/
+│   ├── vite.svg
+│   ├── CSS/
+│   │   └── navbar.css
+│   └── img/
+│       ├── analytics.png
+│       ├── searchDevice2.jpg
+│       ├── task asign.png
+│       └── taskqueue.avif
+└── src/
+    ├── App.css
+    ├── App.jsx
+    ├── index.css
+    ├── main.jsx
+    ├── assets/
+    │   └── react.svg
+    ├── components/
+    │   ├── Navbar.css
+    │   ├── Navbar.jsx
+    │   ├── Graphs/
+    │   │   ├── AnalyticPage.jsx
+    │   │   ├── AreaGraph.jsx
+    │   │   ├── BarGraph.jsx
+    │   │   ├── LineGraph.jsx
+    │   │   ├── PieChart.jsx
+    │   │   └── StackBarGraph.jsx
+    │   ├── home components/
+    │   │   ├── Cards.css
+    │   │   ├── Cards.jsx
+    │   │   └── HomePage.jsx
+    │   └── TaskForm/
+    │       ├── FormStep1.jsx
+    │       ├── FormStep2.jsx
+    │       ├── FormStep3.jsx
+    │       ├── FormStep4.jsx
+    │       ├── FormStep5.jsx
+    │       └── TaskForm.jsx
+    └── pages/
+        ├── Assign.jsx
+        ├── Dashboard.jsx
+        ├── GiveTask.jsx
+        ├── Home.jsx
+        ├── Inventory.jsx
+        ├── Login.jsx
+        ├── NotFound.jsx
+        ├── Device-details/
+        │   ├── DeviceDetail.jsx
+        │   ├── DeviceInfo.jsx
+        │   ├── SampleData.jsx
+        │   └── Search.jsx
+        └── Task/
+            ├── Task.jsx
+            ├── TaskListing.jsx
+            └── TaskPage.jsx
