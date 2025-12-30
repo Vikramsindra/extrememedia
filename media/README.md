@@ -69,3 +69,22 @@ media/
             ├── Task.jsx
             ├── TaskListing.jsx
             └── TaskPage.jsx
+
+
+
+## Application Routes
+
+| Path           | Component        | Access                  |
+|----------------|-----------------|-------------------------|
+| /              | Home             | Public                  |
+| /login         | Login            | Public                  |
+| /dashboard     | Dashboard        | Logged-in users         |
+| /assign        | AssignTask       | Logged-in users         |
+| /task          | TaskForm         | Logged-in users         |
+| /deviceDetail  | DevicePage       | Logged-in users         |
+| /taskListing   | TaskPage         | Logged-in users         |
+| /give-task     | GiveTask         | Manager/Admin only      |
+| /inventory     | Inventory        | Manager/Admin only      |
+| /analytics     | AnalyticPage     | Manager/Admin only      |
+| *              | NotFound         | Catch-all               |
+
