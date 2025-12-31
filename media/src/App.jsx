@@ -15,8 +15,8 @@ import TaskPage from "./pages/Task/TaskPage";
 import DevicePage from "./pages/Device-details/DeviceDetail";
 import Inventory from "./pages/Inventory-mangement/InventoryPage";
 
-// ✅ FIXED import (case-sensitive)
 import AnalyticPage from "./components/Graphs/AnalyticPage";
+import PerformanceDashboard from "./pages/PerformanceDashboard"; // ✅ NEW
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,10 +32,9 @@ function App() {
     setUser(null);
   };
 
+  // ✅ Check session on reload
   useEffect(() => {
-    fetch("/api/auth/me", {
-      credentials: "include",
-    })
+    fetch("/api/auth/me", { credentials: "include" })
       .then((res) => {
         if (!res.ok) throw new Error("Not logged in");
         return res.json();
@@ -61,14 +60,14 @@ function App() {
 
       <Container sx={{ mt: 4 }}>
         <Routes>
-          {/* Public routes */}
+          {/* ================= PUBLIC ROUTES ================= */}
           <Route
             path="/"
             element={<Home user={user} isLoggedIn={isLoggedIn} />}
           />
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
 
-          {/* Protected routes */}
+          {/* ================= PROTECTED ROUTES ================= */}
           {isLoggedIn ? (
             <>
               <Route path="/dashboard" element={<Dashboard user={user} />} />
@@ -77,8 +76,8 @@ function App() {
               <Route path="/deviceDetail" element={<DevicePage />} />
               <Route path="/taskListing" element={<TaskPage />} />
 
-              {/* Manager / Admin only */}
-              {(user?.role === "manager" || user?.role === "admin") && (
+              {/* ===== ADMIN / MANAGER ONLY ===== */}
+              {(user?.role === "admin" || user?.role === "manager") && (
                 <>
                   <Route path="/give-task" element={<GiveTask user={user} />} />
                   <Route
@@ -86,6 +85,12 @@ function App() {
                     element={<Inventory user={user} />}
                   />
                   <Route path="/analytics" element={<AnalyticPage />} />
+
+                  {/* ✅ PERFORMANCE DASHBOARD */}
+                  <Route
+                    path="/performance"
+                    element={<PerformanceDashboard />}
+                  />
                 </>
               )}
             </>
@@ -107,7 +112,7 @@ function App() {
             </>
           )}
 
-          {/* Catch-all */}
+          {/* ================= FALLBACK ================= */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Container>

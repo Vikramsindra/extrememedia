@@ -1,19 +1,26 @@
-const mysql = require('mysql2');
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+const mysql = require("mysql2");
 
-console.log('Connecting with:', process.env.DB_USER, process.env.DB_PASS);
+const DEV_MODE = process.env.NODE_ENV === "development";
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-});
+let db = null;
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log('✅ MySQL connected');
-});
+if (!DEV_MODE) {
+  db = mysql.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+  });
 
-module.exports = db; // ✅ This line exports the connection
+  db.connect((err) => {
+    if (err) {
+      console.error("DB connection failed:", err);
+    } else {
+      console.log("MySQL connected");
+    }
+  });
+} else {
+  console.log("DEV MODE: DB connection skipped");
+}
+
+module.exports = db;

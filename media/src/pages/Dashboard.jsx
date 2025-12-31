@@ -1,13 +1,25 @@
 import { useEffect, useState } from "react";
-import { Typography, Snackbar, Alert, Box, Avatar } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import { useLocation } from "react-router-dom";
-import Anayalatic from "../components/Graphs/AnalyticPage";
+import {
+  Typography,
+  Snackbar,
+  Alert,
+  Box,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+} from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import Analytic from "../components/Graphs/AnalyticPage";
 
 const Dashboard = ({ user }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
   const [showPopup, setShowPopup] = useState(false);
 
+  // Show login success message
   useEffect(() => {
     if (location.state?.justLoggedIn) {
       setShowPopup(true);
@@ -15,7 +27,8 @@ const Dashboard = ({ user }) => {
   }, [location.state]);
 
   return (
-    <div className="container-fluid">
+    <Box className="container-fluid">
+      {/* ================= LOGIN SUCCESS POPUP ================= */}
       <Snackbar
         open={showPopup}
         autoHideDuration={4000}
@@ -38,12 +51,63 @@ const Dashboard = ({ user }) => {
         </Alert>
       </Snackbar>
 
-      <div className="container-fluid">
-        <h1 className="mt-2 text-center fs-1 mb-3">Analytics </h1>
-        <Anayalatic />
-      </div>
-    </div>
+      {/* ================= DASHBOARD HEADER ================= */}
+      <Typography
+        variant="h4"
+        align="center"
+        sx={{ mt: 3, mb: 4, fontWeight: 600 }}
+      >
+        Dashboard
+      </Typography>
+
+      {/* ================= DASHBOARD ACTION CARDS ================= */}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: 3,
+          mb: 5,
+        }}
+      >
+        {/* PERFORMANCE DASHBOARD CARD */}
+        <Card sx={{ borderRadius: 3 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Performance Dashboard
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              View top performing employees, rankings, and detailed performance
+              insights with charts.
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button
+              variant="contained"
+              onClick={() => navigate("/performance")}
+            >
+              View Performance
+            </Button>
+          </CardActions>
+        </Card>
+
+        {/* (Future cards can be added here easily) */}
+      </Box>
+
+      {/* ================= ANALYTICS SECTION ================= */}
+      <Box sx={{ mb: 4 }}>
+        <Typography
+          variant="h5"
+          align="center"
+          sx={{ mb: 2, fontWeight: 500 }}
+        >
+          Analytics
+        </Typography>
+
+        <Analytic />
+      </Box>
+    </Box>
   );
 };
 
 export default Dashboard;
+
