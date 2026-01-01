@@ -13,7 +13,7 @@ const InventoryForm = ({ handleChange, formData, handleSubmit }) => {
     <Box sx={{ p: 4 }}>
       <Paper sx={{ maxWidth: 700, mx: "auto", p: 4 }}>
         <Typography variant="h5" gutterBottom>
-          📦 Inventory Entry
+          Module Inward Entry
         </Typography>
 
         <form onSubmit={handleSubmit}>

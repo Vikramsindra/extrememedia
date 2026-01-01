@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css"; // custom styles for hover and colors
+import { logoutUser } from "../services/user";
 
 const Navbar = ({ isLoggedIn, onLogout, user }) => {
   const navigate = useNavigate();
@@ -8,11 +9,7 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-      const data = await res.json();
+      const res = logoutUser();
       onLogout();
       navigate("/");
     } catch (err) {}
@@ -42,7 +39,7 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
             style={{ fontWeight: "bold", fontSize: "1.6rem" }}
           >
             <i className="bi bi-check2-square me-2"></i>
-            Extreme Media
+            Video Wall ERP
           </a>
 
           {/* Mobile Toggle */}

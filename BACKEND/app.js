@@ -11,6 +11,7 @@ const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/task");
 const dataRoute = require("./routes/DataRoute");
 const performanceRoutes = require("./routes/performance");
+const { globalLimiter } = require("./Middlewares/rateLimiter");
 
 const app = express();
 
@@ -54,6 +55,9 @@ app.use(passport.session());
 // =====================
 // Health Check
 // =====================
+
+
+app.use(globalLimiter)
 app.get("/api/test", (req, res) => {
   res.json({ status: "OK", env: process.env.NODE_ENV });
 });

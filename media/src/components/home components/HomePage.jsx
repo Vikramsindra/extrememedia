@@ -32,8 +32,8 @@ function HomePage() {
           <div className="col mb-3">
             <Card
               img="\img\Inventory.png"
-              title="Inventory"
-              btn="Add Inventory"
+              title="Module Inward Entry"
+              btn="Add Entries"
               navi="/inventory"
             />
           </div>

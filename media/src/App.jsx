@@ -16,11 +16,15 @@ import DevicePage from "./pages/Device-details/DeviceDetail";
 import Inventory from "./pages/Inventory-mangement/InventoryPage";
 
 import AnalyticPage from "./components/Graphs/AnalyticPage";
-import PerformanceDashboard from "./pages/PerformanceDashboard"; // ✅ NEW
+import PerformanceDashboard from "./pages/PerformanceDashboard";
+
+// ✅ AUTH SERVICE
+import { fetchCurrentUser } from "./services/user";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const handleLogin = (userData) => {
     setIsLoggedIn(true);
@@ -32,22 +36,28 @@ function App() {
     setUser(null);
   };
 
-  // ✅ Check session on reload
+  // ✅ Restore session on page reload (Axios + Service)
   useEffect(() => {
-    fetch("/api/auth/me", { credentials: "include" })
-      .then((res) => {
-        if (!res.ok) throw new Error("Not logged in");
-        return res.json();
-      })
-      .then((data) => {
+    const loadUser = async () => {
+      try {
+        const res = await fetchCurrentUser();
         setIsLoggedIn(true);
-        setUser(data.user);
-      })
-      .catch(() => {
+        setUser(res.data.user);
+      } catch (err) {
         setIsLoggedIn(false);
         setUser(null);
-      });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
   }, []);
+
+  // Optional: prevent route flicker
+  if (loading) {
+    return <p style={{ textAlign: "center" }}>Loading...</p>;
+  }
 
   return (
     <BrowserRouter>
@@ -85,8 +95,6 @@ function App() {
                     element={<Inventory user={user} />}
                   />
                   <Route path="/analytics" element={<AnalyticPage />} />
-
-                  {/* ✅ PERFORMANCE DASHBOARD */}
                   <Route
                     path="/performance"
                     element={<PerformanceDashboard />}

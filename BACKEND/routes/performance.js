@@ -3,7 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/PerformanceController");
-const { allowRoles } = require("../Middleware");
+const { allowRoles } = require("../Middlewares/RolebasedMiddlewares");
 
 // Admin / Manager
 router.get(

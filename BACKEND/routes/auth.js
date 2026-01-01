@@ -1,5 +1,7 @@
 const express = require("express");
 const passport = require("passport");
+const { logout, reloadLogin } = require("../controllers/authControllers");
+const { loginLimiter } = require("../Middlewares/rateLimiter");
 
 const router = express.Router();
 
@@ -12,19 +14,7 @@ console.log("AUTH ROUTES | DEV_MODE:", DEV_MODE);
  * LOGIN
  * =====================
  */
-router.post("/login", (req, res, next) => {
-  // ✅ DEV MODE: bypass passport & DB
-  if (DEV_MODE) {
-    return res.json({
-      user: {
-        id: 1,
-        username: "demo",
-        role: "admin",
-        name: "Dev Admin",
-      },
-    });
-  }
-
+router.post("/login", loginLimiter, (req, res, next) => {
   // 🔐 PROD MODE: real authentication
   passport.authenticate("local", (err, user, info) => {
     if (err) {
@@ -61,41 +51,14 @@ router.post("/login", (req, res, next) => {
  * =====================
  * Used by App.jsx on page reload
  */
-router.get("/me", (req, res) => {
-  // ✅ DEV MODE
-  if (DEV_MODE) {
-    return res.json({
-      user: {
-        id: 1,
-        username: "demo",
-        role: "admin",
-        name: "Dev Admin",
-      },
-    });
-  }
-
-  // 🔐 PROD MODE
-  if (!req.isAuthenticated || !req.isAuthenticated()) {
-    return res.status(401).json({ message: "Not authenticated" });
-  }
-
-  res.json({ user: req.user });
-});
+router.get("/me", reloadLogin);
 
 /**
  * =====================
  * LOGOUT
  * =====================
  */
-router.post("/logout", (req, res) => {
-  if (DEV_MODE) {
-    return res.json({ message: "Logged out (dev)" });
-  }
-
-  req.logout(() => {
-    res.json({ message: "Logged out" });
-  });
-});
+router.post("/logout", logout);
 
 module.exports = router;
 

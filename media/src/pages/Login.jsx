@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 import useAutoClearMessage from "../Hooks/ShowMsg";
+import { loginUser } from "../services/user";
 
 const Login = ({ onLogin }) => {
   const navigate = useNavigate();
@@ -24,23 +25,13 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, role }),
-      });
+      const res = await loginUser({ username, password, role });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Login failed");
-      }
-
-      onLogin(data.user);
+      onLogin(res.data.user);
       navigate("/");
     } catch (err) {
-      showMsg(err.message); // ✅ correct
+      const message = err.response?.data?.message || "Login failed";
+      showMsg(message);
       console.error("Login error:", err);
     }
   };
@@ -98,6 +89,7 @@ const Login = ({ onLogin }) => {
           <MenuItem value="manager">Manager</MenuItem>
           <MenuItem value="admin">Admin</MenuItem>
         </TextField>
+
         <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
           Login
         </Button>

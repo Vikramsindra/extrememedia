@@ -5,8 +5,9 @@ import {
   Button,
   Typography,
   MenuItem,
-  Paper
+  Paper,
 } from "@mui/material";
+import { createTask } from "../services/taskService";
 
 const TASK_OPTIONS = [
   "Full Opening",
@@ -24,38 +25,54 @@ const TASK_OPTIONS = [
   "Full Fitting",
   "QC",
   "Back Glue Apply",
-  "Other"
+  "Other",
 ];
 
 const GiveTask = () => {
   const [taskName, setTaskName] = useState("");
   const [customTask, setCustomTask] = useState("");
   const [description, setDescription] = useState("");
-  const [assignedBy, setAssignedBy] = useState("manager01");
   const [assignedTo, setAssignedTo] = useState("");
   const [priority, setPriority] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const isOtherSelected = taskName === "Other";
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const finalTaskName = isOtherSelected ? customTask : taskName;
 
+    if (!finalTaskName.trim()) {
+      alert("Task name is required");
+      return;
+    }
+
     const payload = {
-      taskName: finalTaskName,
+      title: finalTaskName, // ✅ backend expects `title`
       description,
-      assignedBy,
+      assignee: assignedTo, // ✅ mapped correctly
       assignedTo,
       priority,
-      dueDate
     };
 
-    console.log("TASK DATA:", payload);
+    try {
+      setLoading(true);
+      await createTask(payload);
+      alert("✅ Task given successfully!");
 
-    // 🔗 Later you can send this to backend
-    // fetch("/api/task", { method: "POST", body: JSON.stringify(payload) })
+      // Reset form
+      setTaskName("");
+      setCustomTask("");
+      setDescription("");
+      setAssignedTo("");
+      setPriority("");
+    } catch (err) {
+      console.error("❌ Task creation failed:", err.response?.data || err);
+      alert("❌ Failed to give task");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -66,7 +83,7 @@ const GiveTask = () => {
         </Typography>
 
         <form onSubmit={handleSubmit}>
-          {/* TASK NAME DROPDOWN */}
+          {/* TASK NAME */}
           <TextField
             label="Task Name"
             select
@@ -83,7 +100,7 @@ const GiveTask = () => {
             ))}
           </TextField>
 
-          {/* SHOW ONLY IF "OTHER" */}
+          {/* CUSTOM TASK */}
           {isOtherSelected && (
             <TextField
               label="Custom Task Name"
@@ -95,6 +112,7 @@ const GiveTask = () => {
             />
           )}
 
+          {/* DESCRIPTION */}
           <TextField
             label="Description"
             fullWidth
@@ -105,14 +123,7 @@ const GiveTask = () => {
             onChange={(e) => setDescription(e.target.value)}
           />
 
-          <TextField
-            label="Assigned By"
-            fullWidth
-            margin="normal"
-            value={assignedBy}
-            disabled
-          />
-
+          {/* ASSIGNED TO */}
           <TextField
             label="Assigned To"
             fullWidth
@@ -122,6 +133,7 @@ const GiveTask = () => {
             required
           />
 
+          {/* PRIORITY */}
           <TextField
             label="Priority"
             select
@@ -136,24 +148,14 @@ const GiveTask = () => {
             <MenuItem value="High">High</MenuItem>
           </TextField>
 
-          <TextField
-            label="Due Date"
-            type="date"
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ shrink: true }}
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            required
-          />
-
           <Button
             type="submit"
             variant="contained"
             fullWidth
             sx={{ mt: 3 }}
+            disabled={loading}
           >
-            GIVE TASK
+            {loading ? "GIVING TASK..." : "GIVE TASK"}
           </Button>
         </form>
       </Paper>
@@ -162,4 +164,3 @@ const GiveTask = () => {
 };
 
 export default GiveTask;
-

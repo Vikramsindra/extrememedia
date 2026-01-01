@@ -1,34 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const {EnsureAdmin} = require('../Middleware');
+const { EnsureAdmin } = require('../Middlewares/RolebasedMiddlewares');
 const db = require('../config/db');
+const wrapasync = require('../Utils/ErrorWrapper');
+const { taskLimiter } = require('../Middlewares/rateLimiter');
 
-router.post('/taskcreate', EnsureAdmin, (req, res) => {
-  try {
-    const { title, description, assignee, assignedTo, priority, dueDate } = req.body;
-    const assignedBy = req.user?.username || 'Unknown';
-
-    const query = `
-      INSERT INTO tasks (title, description, assignee, assigned_to, priority, due_date, assigned_by, is_done)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    db.query(
-      query,
-      [title, description, assignee, assignedTo, priority, dueDate, assignedBy, false],
-      (err) => {
-        if (err) {
-          console.error("❌ DB Error:", err);
-          return res.status(500).json({ error: 'Database error', details: err });
-        }
-        res.json({ message: 'Task given successfully' });
-      }
-    );
-  } catch (err) {
-    console.error("❌ Route Error:", err);
-    res.status(500).json({ error: 'Server error', details: err });
-  }
+router.post('/taskCreate', EnsureAdmin, taskLimiter, (req, res) => {
+  const { title, description, assignee, assignedTo, priority } = req.body;
+  const assignedBy = req.user.username;
+  const newtask = { title, description, assignee, assignedTo, priority, assignedBy };
+  console.log(newtask);
+  res.status(200).json("task added ")
 });
+
+
 
 router.get('/tasks', (req, res) => {
   const assignedTo = req.user?.username || 'Unknown';

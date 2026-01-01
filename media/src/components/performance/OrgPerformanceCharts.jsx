@@ -12,7 +12,9 @@ import { Box, Typography } from "@mui/material";
 
 export default function OrgPerformanceCharts({ data }) {
   return (
-    <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 3, mb: 4 }}>
+    <Box
+      sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 3, mb: 4 }}
+    >
       {/* PERFORMANCE COMPARISON */}
       <Box>
         <Typography variant="h6" sx={{ mb: 1 }}>
@@ -24,7 +26,7 @@ export default function OrgPerformanceCharts({ data }) {
               <XAxis dataKey="employeeName" />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="efficiencyScore" />
+              <Bar dataKey="efficiencyScore" fill="#1E88E5" barSize={40} />
             </BarChart>
           </ResponsiveContainer>
         </Box>
@@ -49,5 +51,3 @@ export default function OrgPerformanceCharts({ data }) {
     </Box>
   );
 }
-
-
