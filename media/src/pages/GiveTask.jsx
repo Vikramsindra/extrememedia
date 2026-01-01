@@ -6,8 +6,12 @@ import {
   Typography,
   MenuItem,
   Paper,
+  CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { createTask } from "../services/taskService";
+import useAutoClearMessage from "../Hooks/ShowMsg"; // ✅ your hook
 
 const TASK_OPTIONS = [
   "Full Opening",
@@ -36,30 +40,27 @@ const GiveTask = () => {
   const [priority, setPriority] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const { msg, showMsg } = useAutoClearMessage(3000); // auto clear after 4s
   const isOtherSelected = taskName === "Other";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
 
     const finalTaskName = isOtherSelected ? customTask : taskName;
-
     if (!finalTaskName.trim()) {
-      alert("Task name is required");
+      showMsg("❌ Task name is required");
       return;
     }
 
-    const payload = {
-      title: finalTaskName, // ✅ backend expects `title`
-      description,
-      assignee: assignedTo, // ✅ mapped correctly
-      assignedTo,
-      priority,
-    };
+    const payload = { title: finalTaskName, description, assignedTo, priority };
 
     try {
       setLoading(true);
-      await createTask(payload);
-      alert("✅ Task given successfully!");
+      const res = await createTask(payload);
+
+      // ✅ show API message if available
+      showMsg(res.data?.message || "✅ Task given successfully!");
 
       // Reset form
       setTaskName("");
@@ -69,7 +70,7 @@ const GiveTask = () => {
       setPriority("");
     } catch (err) {
       console.error("❌ Task creation failed:", err.response?.data || err);
-      alert("❌ Failed to give task");
+      showMsg(err.response?.data?.message || "❌ Failed to give task");
     } finally {
       setLoading(false);
     }
@@ -79,86 +80,106 @@ const GiveTask = () => {
     <Box sx={{ p: 4 }}>
       <Paper sx={{ maxWidth: 600, mx: "auto", p: 4 }}>
         <Typography variant="h5" gutterBottom>
-          ✅ Give Task
+          Give Task
         </Typography>
 
         <form onSubmit={handleSubmit}>
-          {/* TASK NAME */}
-          <TextField
-            label="Task Name"
-            select
-            fullWidth
-            margin="normal"
-            value={taskName}
-            onChange={(e) => setTaskName(e.target.value)}
-            required
-          >
-            {TASK_OPTIONS.map((task) => (
-              <MenuItem key={task} value={task}>
-                {task}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          {/* CUSTOM TASK */}
-          {isOtherSelected && (
+          <fieldset disabled={loading} style={{ border: "none", padding: 0 }}>
+            {/* TASK NAME */}
             <TextField
-              label="Custom Task Name"
+              label="Task Name"
+              select
               fullWidth
               margin="normal"
-              value={customTask}
-              onChange={(e) => setCustomTask(e.target.value)}
+              value={taskName}
+              onChange={(e) => setTaskName(e.target.value)}
+              required
+            >
+              {TASK_OPTIONS.map((task) => (
+                <MenuItem key={task} value={task}>
+                  {task}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            {/* CUSTOM TASK */}
+            {isOtherSelected && (
+              <TextField
+                label="Custom Task Name"
+                fullWidth
+                margin="normal"
+                value={customTask}
+                onChange={(e) => setCustomTask(e.target.value)}
+                required
+              />
+            )}
+
+            {/* DESCRIPTION */}
+            <TextField
+              label="Description"
+              fullWidth
+              margin="normal"
+              multiline
+              rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+
+            {/* ASSIGNED TO */}
+            <TextField
+              label="Assigned To (username)"
+              fullWidth
+              margin="normal"
+              value={assignedTo}
+              onChange={(e) => setAssignedTo(e.target.value)}
               required
             />
-          )}
 
-          {/* DESCRIPTION */}
-          <TextField
-            label="Description"
-            fullWidth
-            margin="normal"
-            multiline
-            rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+            {/* PRIORITY */}
+            <TextField
+              label="Priority"
+              select
+              fullWidth
+              margin="normal"
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+              required
+            >
+              <MenuItem value="Low">Low</MenuItem>
+              <MenuItem value="Medium">Medium</MenuItem>
+              <MenuItem value="High">High</MenuItem>
+            </TextField>
 
-          {/* ASSIGNED TO */}
-          <TextField
-            label="Assigned To"
-            fullWidth
-            margin="normal"
-            value={assignedTo}
-            onChange={(e) => setAssignedTo(e.target.value)}
-            required
-          />
-
-          {/* PRIORITY */}
-          <TextField
-            label="Priority"
-            select
-            fullWidth
-            margin="normal"
-            value={priority}
-            onChange={(e) => setPriority(e.target.value)}
-            required
-          >
-            <MenuItem value="Low">Low</MenuItem>
-            <MenuItem value="Medium">Medium</MenuItem>
-            <MenuItem value="High">High</MenuItem>
-          </TextField>
-
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            sx={{ mt: 3 }}
-            disabled={loading}
-          >
-            {loading ? "GIVING TASK..." : "GIVE TASK"}
-          </Button>
+            {/* SUBMIT */}
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              sx={{ mt: 3 }}
+              disabled={loading}
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                "GIVE TASK"
+              )}
+            </Button>
+          </fieldset>
         </form>
       </Paper>
+
+      {/* ✅ Snackbar for success/error messages */}
+      <Snackbar
+        open={!!msg}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          severity={msg.startsWith("❌") ? "error" : "success"}
+          variant="filled"
+        >
+          {msg}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

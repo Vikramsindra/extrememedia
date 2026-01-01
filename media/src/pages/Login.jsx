@@ -7,6 +7,7 @@ import {
   Box,
   MenuItem,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 
 import useAutoClearMessage from "../Hooks/ShowMsg";
@@ -18,21 +19,27 @@ const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("technician");
+  const [loading, setLoading] = useState(false);
 
   const { msg, showMsg } = useAutoClearMessage(5000);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await loginUser({ username, password, role });
 
-      onLogin(res.data.user);
+      // ✅ Save user in app state
+      onLogin(res.user);
+
       navigate("/");
     } catch (err) {
       const message = err.response?.data?.message || "Login failed";
       showMsg(message);
       console.error("Login error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,41 +65,50 @@ const Login = ({ onLogin }) => {
       )}
 
       <form onSubmit={handleSubmit}>
-        <TextField
-          label="Username"
-          fullWidth
-          margin="normal"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
+        <fieldset disabled={loading} style={{ border: "none", padding: 0 }}>
+          <TextField
+            label="Username"
+            fullWidth
+            margin="normal"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
 
-        <TextField
-          label="Password"
-          type="password"
-          fullWidth
-          margin="normal"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <TextField
+            label="Password"
+            type="password"
+            fullWidth
+            margin="normal"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <TextField
-          label="Role"
-          select
-          fullWidth
-          margin="normal"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <MenuItem value="technician">Technician</MenuItem>
-          <MenuItem value="manager">Manager</MenuItem>
-          <MenuItem value="admin">Admin</MenuItem>
-        </TextField>
+          <TextField
+            label="Role"
+            select
+            fullWidth
+            margin="normal"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <MenuItem value="technician">Technician</MenuItem>
+            <MenuItem value="manager">Manager</MenuItem>
+            <MenuItem value="admin">Admin</MenuItem>
+          </TextField>
 
-        <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-          Login
-        </Button>
+          {/* ✅ LOGIN BUTTON ONLY */}
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{ mt: 2 }}
+            disabled={loading}
+          >
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+          </Button>
+        </fieldset>
       </form>
     </Box>
   );

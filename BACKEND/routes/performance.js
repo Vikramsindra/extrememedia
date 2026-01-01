@@ -3,26 +3,30 @@
 const express = require("express");
 const router = express.Router();
 const controller = require("../controllers/PerformanceController");
-const { allowRoles } = require("../Middlewares/RolebasedMiddlewares");
+const { allowRoles, ensureManager } = require("../Middlewares/roleMiddleware");
+const { ensureAuth } = require("../Middlewares/authMiddleware");
 
 // Admin / Manager
 router.get(
   "/leaderboard",
-  allowRoles("admin", "manager"),
+  ensureAuth,
+  ensureManager,
   controller.getLeaderboard
 );
 
 // Admin / Manager → employee detail
 router.get(
   "/employee/:name",
-  allowRoles("admin", "manager"),
+  ensureAuth,
+  ensureManager,
   controller.getEmployeeDetails
 );
 
 // Technician (mobile app)
 router.get(
   "/me/badge",
-  allowRoles("technician"),
+  ensureAuth,
+  ensureManager,
   controller.getMyBadge
 );
 

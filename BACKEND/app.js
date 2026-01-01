@@ -2,8 +2,7 @@
 require("dotenv").config();
 
 const express = require("express");
-const session = require("express-session");
-const passport = require("passport");
+const cookiesParser = require("cookie-parser");
 const cors = require("cors");
 
 // Routes
@@ -16,7 +15,7 @@ const { globalLimiter } = require("./Middlewares/rateLimiter");
 const app = express();
 
 // ✅ Initialize Passport strategies
-require("./config/passport")(passport);
+// require("./config/passport")(passport);
 
 // =====================
 // Middleware
@@ -34,23 +33,25 @@ app.use(
   })
 );
 
-// Sessions
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "dev-secret",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: false, // true only with HTTPS
-      sameSite: "lax",
-    },
-  })
-);
+app.use(cookiesParser());
 
-// Passport
-app.use(passport.initialize());
-app.use(passport.session());
+// Sessions
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET || "dev-secret",
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       httpOnly: true,
+//       secure: false, // true only with HTTPS
+//       sameSite: "lax",
+//     },
+//   })
+// );
+
+// // Passport
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // =====================
 // Health Check

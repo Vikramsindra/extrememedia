@@ -1,9 +1,16 @@
 require("dotenv").config(); // ✅ MUST BE FIRST
 
 const app = require("./app");
+const { connectDB, sequelize } = require("./config/db");
+const port = process.env.PORT || 8000;
 
-const PORT = process.env.PORT || 5000;
+connectDB();
 
-app.listen(PORT, () => {
-  console.log("Server is Running on ", PORT);
+// Create tables if not exists
+sequelize.sync({ alter: true })
+  .then(() => console.log("✅ Models synced"))
+  .catch(console.error);
+
+app.listen(port, () => {
+  console.log("Server is Running on ", port);
 });

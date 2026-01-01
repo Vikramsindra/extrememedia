@@ -42,7 +42,7 @@ function App() {
       try {
         const res = await fetchCurrentUser();
         setIsLoggedIn(true);
-        setUser(res.data.user);
+        setUser(res.user); // ✅ FIXED
       } catch (err) {
         setIsLoggedIn(false);
         setUser(null);

@@ -1,19 +1,32 @@
-const mysql = require('mysql2');
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+const path = require("path");
+require("dotenv").config({
+  path: path.resolve(__dirname, "../.env")
+});
+const { Sequelize } = require("sequelize");
 
-console.log('Connecting with:', process.env.DB_USER, process.env.DB_PASS);
+if (!process.env.DATABASE_URL) {
+  throw new Error("❌ DATABASE_URL is missing in .env");
+}
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialect: "postgres",
+  logging: false,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
 });
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log('✅ MySQL connected');
-});
+const connectDB = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("✅ PostgreSQL connected via Sequelize");
+  } catch (err) {
+    console.error("❌ DB connection failed:", err);
+    process.exit(1);
+  }
+};
 
-module.exports = db; // ✅ This line exports the connection
+module.exports = { sequelize, connectDB };
