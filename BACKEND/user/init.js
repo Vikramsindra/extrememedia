@@ -1,24 +1,65 @@
-const bcrypt = require('bcrypt');
-const db = require('../config/db');
+require("dotenv").config();
+const bcrypt = require("bcrypt");
+const User = require("../models/User");
+const { sequelize } = require("../config/db");
 
-const users = [
-  { username: 'vikram', password: 'secure123', role: 'technician' },
-  { username: 'manager01', password: 'manageMe', role: 'manager' },
-  { username: 'techie02', password: 'techPass', role: 'technician' },
-  { username: 'manager02', password: 'adminAccess', role: 'manager' },
-  { username: 'guestUser', password: 'guest123', role: 'guest' }
-];
+(async () => {
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync();
 
-users.forEach(({ username, password, role }) => {
-  bcrypt.hash(password, 10, (err, hash) => {
-    if (err) throw err;
-    db.query(
-      'INSERT INTO user (username, password, role) VALUES (?, ?, ?)',
-      [username, hash, role],
-      (err) => {
-        if (err) throw err;
-        console.log(`✅ Inserted ${username} with role ${role}`);
+    // Helper to create user if not exists
+    const createUserIfNotExists = async ({ username, password, role, name }) => {
+      const existingUser = await User.findOne({ where: { username } });
+      if (existingUser) {
+        console.log(`✅ User "${username}" already exists`);
+        return;
       }
-    );
-  });
-});
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await User.create({ username, password: hashedPassword, role, name });
+      console.log(`✅ User "${username}" created`);
+    };
+
+    // Managers
+    await createUserIfNotExists({
+      username: "manager",
+      password: "manager123",
+      role: "manager",
+      name: "Manager User",
+    });
+
+    await createUserIfNotExists({
+      username: "manager2",
+      password: "manager456",
+      role: "manager",
+      name: "Second Manager",
+    });
+
+    // Technicians
+    await createUserIfNotExists({
+      username: "tech1",
+      password: "tech123",
+      role: "technician",
+      name: "Technician One",
+    });
+
+    await createUserIfNotExists({
+      username: "tech2",
+      password: "tech456",
+      role: "technician",
+      name: "Technician Two",
+    });
+
+    await createUserIfNotExists({
+      username: "tech3",
+      password: "tech789",
+      role: "technician",
+      name: "Technician Three",
+    });
+
+    process.exit();
+  } catch (err) {
+    console.error("❌ Error creating users:", err);
+    process.exit(1);
+  }
+})();
