@@ -1,11 +1,17 @@
 import api from "../api/axios";
 
+export const registerUser = (data) => {
+  return api
+    .post("/user/register", data, { withCredentials: true })
+    .then((res) => res.data);
+};
+
 /**
  * Login user
  * Cookie-based JWT will be set automatically
  */
 export const loginUser = async (credentials) => {
-  const response = await api.post("/auth/login", credentials, {
+  const response = await api.post("user/auth/login", credentials, {
     withCredentials: true, // ✅ REQUIRED
   });
 
@@ -16,7 +22,7 @@ export const loginUser = async (credentials) => {
  * Get currently logged-in user
  */
 export const fetchCurrentUser = async () => {
-  const response = await api.get("/auth/me", {
+  const response = await api.get("user/auth/me", {
     withCredentials: true, // ✅ REQUIRED
   });
 
@@ -28,7 +34,7 @@ export const fetchCurrentUser = async () => {
  */
 export const logoutUser = async () => {
   const response = await api.post(
-    "/auth/logout",
+    "/user/logout",
     {},
     { withCredentials: true } // ✅ REQUIRED
   );

@@ -3,6 +3,49 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+exports.register = async (req, res) => {
+    try {
+        const { username, name, password, role } = req.body;
+
+        // ✅ Proper validation
+        if (!username || !password || !role || !name) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        // ✅ Check if user exists
+        const existingUser = await User.findOne({ where: { username } });
+        if (existingUser) {
+            return res.status(409).json({ message: "Username already exists" });
+        }
+
+        // ✅ Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // ✅ Create user
+        const newUser = await User.create({
+            username,
+            name,
+            password: hashedPassword,
+            role,
+        });
+
+        console.log(`✅ User "${username}" created`);
+
+        // ✅ Send response
+        return res.status(201).json({
+            message: "User registered successfully",
+            user: {
+                id: newUser.id,
+                username: newUser.username,
+                role: newUser.role,
+            },
+        });
+
+    } catch (error) {
+        console.error("❌ Register error:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
 /**
  * LOGIN
  */

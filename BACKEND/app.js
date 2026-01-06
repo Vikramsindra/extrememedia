@@ -6,7 +6,7 @@ const cookiesParser = require("cookie-parser");
 const cors = require("cors");
 
 // Routes
-const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
 const taskRoutes = require("./routes/task");
 const dataRoute = require("./routes/DataRoute");
 const performanceRoutes = require("./routes/performance");
@@ -66,7 +66,7 @@ app.get("/api/test", (req, res) => {
 // =====================
 // Routes
 // =====================
-app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/task", taskRoutes);
 app.use("/api/data", dataRoute);
 app.use("/api/performance", performanceRoutes);

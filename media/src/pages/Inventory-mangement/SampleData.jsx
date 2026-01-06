@@ -146,15 +146,15 @@ export const header = [
 ];
 
 export const columns = [
-  { label: "Date", field: "date" },
-  { label: "Client", field: "client" },
-  { label: "Batch No", field: "batch" },
-  { label: "Lot No", field: "lot" },
-  { label: "Tran Type", field: "type" },
-  { label: "Qty", field: "qty", align: "right" },
-  { label: "Return Reason", field: "reason" },
-  { label: "RC/DC No", field: "rcdc" },
-  { label: "Remarks", field: "remarks" },
+  { field: "tranDate", label: "Date" },
+  { field: "client", label: "Client" },
+  { field: "batchNo", label: "Batch No" },
+  { field: "lotNo", label: "Lot No" },
+  { field: "tranType", label: "Tran Type" },
+  { field: "qty", label: "Qty", align: "right" },
+  { field: "returnReason", label: "Return Reason" },
+  { field: "rcDcNo", label: "RC/DC No" },
+  { field: "remarks", label: "Remarks" },
 ];
 
 // for summary
@@ -218,13 +218,13 @@ export const inventoryData = [
 ];
 
 export const inventoryColumns = [
-  { label: "Date", field: "date" },
-  { label: "Batch No", field: "batch" },
-  { label: "Lot No", field: "lot", align: "center" },
-  { label: "Received Qty", field: "received", align: "right" },
-  { label: "Dispatch Qty", field: "dispatch", align: "right" },
-  { label: "Return Qty", field: "returnQty", align: "right" },
-  { label: "Re-Dispatch Qty", field: "redispatch", align: "right" },
-  { label: "Balance Qty", field: "balance", align: "right" },
-  { label: "Return %", field: "returnPct", align: "right" },
+  { field: "tranDate", label: "Date" },
+  { field: "batchNo", label: "Batch No" },
+  { field: "lotNo", label: "Lot No" },
+  { field: "receivedQty", label: "Received Qty", align: "right" },
+  { field: "dispatchQty", label: "Dispatch Qty", align: "right" },
+  { field: "returnQty", label: "Return Qty", align: "right" },
+  { field: "reDispatchQty", label: "Re-Dispatch Qty", align: "right" },
+  { field: "balanceQty", label: "Balance Qty", align: "right" },
+  { field: "returnPercent", label: "Return %" },
 ];

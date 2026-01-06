@@ -127,6 +127,13 @@ const Navbar = ({ isLoggedIn, onLogout, user }) => {
 
                   <button
                     className="btn custom-btn-logout mb-2 mb-lg-0 ms-lg-2"
+                    onClick={() => navigate("/createUser")}
+                  >
+                    Create User
+                  </button>
+
+                  <button
+                    className="btn custom-btn-logout mb-2 mb-lg-0 ms-lg-2"
                     onClick={handleLogout}
                   >
                     <i className="bi bi-box-arrow-right me-1"></i> Logout

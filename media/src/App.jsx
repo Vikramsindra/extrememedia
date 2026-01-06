@@ -20,6 +20,7 @@ import PerformanceDashboard from "./pages/PerformanceDashboard";
 
 // ✅ AUTH SERVICE
 import { fetchCurrentUser } from "./services/user";
+import CreateUser from "./pages/CreateUser";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -99,6 +100,9 @@ function App() {
                     path="/performance"
                     element={<PerformanceDashboard />}
                   />
+                  <Route path="/createUser" element={<CreateUser />} />
+
+                  
                 </>
               )}
             </>

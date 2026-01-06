@@ -34,6 +34,15 @@ const Task = sequelize.define(
             defaultValue: "PENDING",
         },
 
+        // ✅ NEW FIELD
+        quantity: {
+            type: DataTypes.INTEGER,
+            allowNull: true,          // filled when technician submits
+            validate: {
+                min: 0,
+            },
+        },
+
         assignedById: {
             type: DataTypes.INTEGER,
             allowNull: false,
